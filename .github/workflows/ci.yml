@@ -41,11 +41,20 @@ jobs:
       - name: Run tests
         run: cargo test --verbose
 
+      - name: Run integration tests
+        run: cargo test --test integration_tests --verbose
+
+      - name: Run property tests
+        run: cargo test --test property_tests --verbose
+
       - name: Check formatting
         run: cargo fmt -- --check
 
       - name: Run clippy
         run: cargo clippy -- -D warnings
+
+      - name: Run benchmarks (quick)
+        run: cargo bench --bench fish_config_bench -- --quick
 
   build:
     name: Build

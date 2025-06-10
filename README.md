@@ -195,8 +195,72 @@ cargo build
 
 ### Testing
 
+The project includes a comprehensive test suite with multiple types of tests:
+
+#### Unit Tests
+```bash
+cargo test --lib
+```
+Tests core functionality of `fish_config` and `plugin_config` functions with 19 test cases covering:
+- Plugin configuration generation and validation
+- Fish greeting handling (string, empty, nil)
+- Aliases, abbreviations, and environment variables
+- PATH management and custom functions
+- Multi-line function processing
+- Raw fish commands and prompt configuration
+- Edge cases and error handling
+
+#### Integration Tests
+```bash
+cargo test --test integration_tests
+```
+Tests CLI functionality with 14 test cases covering:
+- Command-line argument handling (`--config`, `--gen-config`)
+- EDN parsing and error handling
+- End-to-end configuration generation
+- Individual feature testing (aliases, env vars, paths, functions, etc.)
+- Invalid input handling and error messages
+
+#### Property-Based Tests
+```bash
+cargo test --test property_tests
+```
+Runs 11 property-based tests using the `proptest` crate to verify:
+- Function never panics with random inputs
+- Output consistency and validation
+- Section ordering and formatting
+- Large configuration handling (up to 1000 aliases)
+- Special character handling
+
+#### Test Helpers
+```bash
+cargo test --test test_helpers
+```
+Provides 5 utility tests and helper functions for:
+- Creating test configurations
+- Validating fish shell syntax
+- Extracting and parsing generated output
+- Common test assertions and fixtures
+
+#### Performance Benchmarks
+```bash
+cargo bench --bench fish_config_bench
+```
+Benchmarks performance with different configuration sizes:
+- Empty config: ~26ns
+- Small config: ~487ns  
+- Medium config: ~4.9µs
+- Large config: ~47µs
+- 1000 aliases: ~138µs
+
+#### All Tests
 ```bash
 cargo test
+```
+Runs all test types (49 total tests) to ensure comprehensive coverage.
+
+#### Manual Testing
+```bash
 cargo run -- --gen-config < test_config.edn
 ```
 
@@ -209,7 +273,12 @@ cargo clippy
 
 ## Dependencies
 
+### Runtime Dependencies
 - [`clojure-reader`](https://crates.io/crates/clojure-reader) - EDN parsing
+
+### Development Dependencies  
+- [`proptest`](https://crates.io/crates/proptest) - Property-based testing
+- [`criterion`](https://crates.io/crates/criterion) - Performance benchmarking
 
 ## License
 
@@ -220,9 +289,24 @@ cargo clippy
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
-5. Run `cargo fmt` and `cargo clippy`
-6. Submit a pull request
+4. Add tests if applicable:
+   - Unit tests in `src/lib.rs` for core functionality
+   - Integration tests in `tests/integration_tests.rs` for CLI behavior
+   - Property tests in `tests/property_tests.rs` for edge cases
+   - Helper functions in `tests/test_helpers.rs` for common utilities
+5. Run the full test suite: `cargo test`
+6. Run formatting and linting: `cargo fmt` and `cargo clippy`
+7. Run benchmarks if performance-related: `cargo bench`
+8. Submit a pull request
+
+### Test Coverage
+The project maintains comprehensive test coverage with:
+- **49 total tests** across multiple test types
+- **Unit tests** for core library functions
+- **Integration tests** for CLI functionality  
+- **Property-based tests** for robustness
+- **Performance benchmarks** for optimization
+- **Test helpers** for maintainability
 
 ## Changelog
 
