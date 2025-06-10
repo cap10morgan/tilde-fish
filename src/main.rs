@@ -75,10 +75,8 @@ fn fish_config(config: Edn) -> String {
             // Handle fish-greeting
             if let Some(Edn::Str(fish_greeting)) = config_map.get(&Edn::Key("fish-greeting")) {
                 output.push_str(&format!("set fish_greeting '{}'\n", fish_greeting));
-            } else {
-                if config_map.contains_key(&Edn::Key("fish-greeting")) {
-                    output.push_str("set fish_greeting\n");
-                }
+            } else if config_map.contains_key(&Edn::Key("fish-greeting")) {
+                output.push_str("set fish_greeting\n");
             }
             output.push('\n');
 
