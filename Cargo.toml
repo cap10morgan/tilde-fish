@@ -1,5 +1,5 @@
 [package]
-name = "tilde-output-fish"
+name = "tilde-fish"
 version = "0.1.0"
 edition = "2024"
 
