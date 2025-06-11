@@ -103,7 +103,7 @@ jobs:
           cp tilde.edn "target/${{ matrix.target }}/release/"
           $binaryName = if ("${{ matrix.target }}".Contains("windows")) { "tilde-fish.exe" } else { "tilde-fish" }
           cd "target/${{ matrix.target }}/release"
-          Compress-Archive -Path "$binaryName", tilde.edn -DestinationPath "$GITHUB_WORKSPACE/release/${{ matrix.asset_name }}.zip"
+          Compress-Archive -Path "$binaryName", tilde.edn -DestinationPath "$env:GITHUB_WORKSPACE/release/${{ matrix.asset_name }}.zip"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
