@@ -7,7 +7,7 @@ fn main() {
 
     if args.len() > 1 && args[1] == "--config" {
         let config = plugin_config();
-        println!("{}", config);
+        println!("{config}");
         return;
     }
 
@@ -22,7 +22,7 @@ fn main() {
         let cfg = edn::read_string(&input).expect("Failed to parse EDN from stdin");
 
         let config = fish_config(cfg);
-        println!("{}", config);
+        println!("{config}");
         return;
     }
 

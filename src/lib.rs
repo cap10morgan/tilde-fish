@@ -42,7 +42,7 @@ pub fn fish_config(config: Edn) -> String {
         Edn::Map(config_map) => {
             // Handle fish-greeting
             if let Some(Edn::Str(fish_greeting)) = config_map.get(&Edn::Key("fish-greeting")) {
-                output.push_str(&format!("set fish_greeting '{}'\n", fish_greeting));
+                output.push_str(&format!("set fish_greeting '{fish_greeting}'\n"));
             } else if config_map.contains_key(&Edn::Key("fish-greeting")) {
                 output.push_str("set fish_greeting\n");
             }
@@ -69,16 +69,12 @@ pub fn fish_config(config: Edn) -> String {
                 for (key, value) in abbrs {
                     match (key, value) {
                         (Edn::Key(abbr_name), Edn::Str(abbr_expansion)) => {
-                            output.push_str(&format!(
-                                "abbr -a -- {} '{}'\n",
-                                abbr_name, abbr_expansion
-                            ));
+                            output
+                                .push_str(&format!("abbr -a -- {abbr_name} '{abbr_expansion}'\n"));
                         }
                         (Edn::Str(abbr_name), Edn::Str(abbr_expansion)) => {
-                            output.push_str(&format!(
-                                "abbr -a -- {} '{}'\n",
-                                abbr_name, abbr_expansion
-                            ));
+                            output
+                                .push_str(&format!("abbr -a -- {abbr_name} '{abbr_expansion}'\n"));
                         }
                         _ => {}
                     }
@@ -92,10 +88,10 @@ pub fn fish_config(config: Edn) -> String {
                 for (key, value) in aliases {
                     match (key, value) {
                         (Edn::Key(alias_name), Edn::Str(alias_command)) => {
-                            output.push_str(&format!("alias {} '{}'\n", alias_name, alias_command));
+                            output.push_str(&format!("alias {alias_name} '{alias_command}'\n"));
                         }
                         (Edn::Str(alias_name), Edn::Str(alias_command)) => {
-                            output.push_str(&format!("alias {} '{}'\n", alias_name, alias_command));
+                            output.push_str(&format!("alias {alias_name} '{alias_command}'\n"));
                         }
                         _ => {}
                     }
@@ -109,10 +105,10 @@ pub fn fish_config(config: Edn) -> String {
                 for (key, value) in env_vars {
                     match (key, value) {
                         (Edn::Key(var_name), Edn::Str(var_value)) => {
-                            output.push_str(&format!("set -gx {} '{}'\n", var_name, var_value));
+                            output.push_str(&format!("set -gx {var_name} '{var_value}'\n"));
                         }
                         (Edn::Str(var_name), Edn::Str(var_value)) => {
-                            output.push_str(&format!("set -gx {} '{}'\n", var_name, var_value));
+                            output.push_str(&format!("set -gx {var_name} '{var_value}'\n"));
                         }
                         _ => {}
                     }
@@ -125,7 +121,7 @@ pub fn fish_config(config: Edn) -> String {
                 output.push_str("# PATH additions\n");
                 for path in paths {
                     if let Edn::Str(path_str) = path {
-                        output.push_str(&format!("fish_add_path {}\n", path_str));
+                        output.push_str(&format!("fish_add_path {path_str}\n"));
                     }
                 }
                 output.push('\n');
@@ -137,23 +133,23 @@ pub fn fish_config(config: Edn) -> String {
                 for (key, value) in functions {
                     match (key, value) {
                         (Edn::Key(func_name), Edn::Str(func_body)) => {
-                            output.push_str(&format!("function {}\n", func_name));
+                            output.push_str(&format!("function {func_name}\n"));
                             // Handle multi-line function bodies with proper newline processing
                             let processed_body = func_body.replace("\\n", "\n");
                             for line in processed_body.lines() {
                                 if !line.trim().is_empty() {
-                                    output.push_str(&format!("    {}\n", line));
+                                    output.push_str(&format!("    {line}\n"));
                                 }
                             }
                             output.push_str("end\n\n");
                         }
                         (Edn::Str(func_name), Edn::Str(func_body)) => {
-                            output.push_str(&format!("function {}\n", func_name));
+                            output.push_str(&format!("function {func_name}\n"));
                             // Handle multi-line function bodies with proper newline processing
                             let processed_body = func_body.replace("\\n", "\n");
                             for line in processed_body.lines() {
                                 if !line.trim().is_empty() {
-                                    output.push_str(&format!("    {}\n", line));
+                                    output.push_str(&format!("    {line}\n"));
                                 }
                             }
                             output.push_str("end\n\n");
@@ -168,7 +164,7 @@ pub fn fish_config(config: Edn) -> String {
                 output.push_str("# Custom Fish Commands\n");
                 for command in commands {
                     if let Edn::Str(cmd_str) = command {
-                        output.push_str(&format!("{}\n", cmd_str));
+                        output.push_str(&format!("{cmd_str}\n"));
                     }
                 }
                 output.push('\n');
@@ -178,7 +174,7 @@ pub fn fish_config(config: Edn) -> String {
             if let Some(Edn::Map(prompt_config)) = config_map.get(&Edn::Key("prompt")) {
                 output.push_str("# Prompt Configuration\n");
                 if let Some(Edn::Str(prompt_style)) = prompt_config.get(&Edn::Key("style")) {
-                    output.push_str(&format!("set -g theme {}\n", prompt_style));
+                    output.push_str(&format!("set -g theme {prompt_style}\n"));
                 }
                 if let Some(Edn::Bool(show_git)) = prompt_config.get(&Edn::Key("show-git")) {
                     output.push_str(&format!(
