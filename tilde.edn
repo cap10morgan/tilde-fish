@@ -1,4 +1,4 @@
 {:tilde/plugin
   {:type :output/executable
-   :build {:command "cargo build --release"}
-   :executable {:path "target/release/tilde-fish"}}}}
+   :build {:command "cargo build --release && mv target/release/tilde-fish ./"}
+   :executable {:path "tilde-fish"}}}}
